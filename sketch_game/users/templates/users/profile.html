@@ -23,11 +23,19 @@
     </style>
 </head>
 <body>
+    {% if user.is_authenticated %}
     <div class="card" >
         <div class="container">
             <h2>{{user.get_username}}</h2>
             <h3>{{user.get_email}}</h3>
         </div>
     </div>
+    <div class="logout-container">
+        <form action="{% url 'user-logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+          </form>
+    </div>
+    {% endif %}
 </body>
 </html>
