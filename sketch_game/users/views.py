@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib import messages 
 from .forms import UserRegisterForm
 from django.contrib.auth.forms import AuthenticationForm 
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 def home(request):
     return render(request, 'users/home.html')
@@ -40,4 +40,11 @@ def signup(request):
     else: 
         form = UserRegisterForm()
     return render(request, 'users/signup.html', {'form':form})
+
+
+def logout_view(request):
+    messages.success(request, "You have been successfully logged out.")
+    logout(request)
+    return redirect('/')  
+
 
