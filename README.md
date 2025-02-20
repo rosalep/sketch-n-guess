@@ -20,7 +20,7 @@ virtualenv <env_name>
 ```
 To start the environment:
 ```
-source <env_name/bin/activate
+source <env_name>/bin/activate
 ```
 Once the environment is set up, run the following commands from the sketch_game/sketch_game directory:
 ```
