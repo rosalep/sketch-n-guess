@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.auth import logout
+
 class CustomUserManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:
@@ -43,6 +44,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     def get_email(self):
         return self.email
+    
+
     
     # will get to this later
     # def get_avatar(self):

@@ -20,8 +20,6 @@ def login_page(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             login(request,form.get_user())
-            # username=form.cleaned_data.get('username')
-            # messages.success(request, f'Account Created, Welcome {username}')
             return redirect("user-profile")
         
     else: 

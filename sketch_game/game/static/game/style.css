@@ -1,0 +1,16 @@
+body {
+    display: grid;
+    row-gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+#game-timer {
+    margin: auto;  
+    justify-content: space-around;
+}
+
+#tools-canvas-container {
+    /* display: flex; */
+    margin: auto;
+  justify-content: space-between;
+}
