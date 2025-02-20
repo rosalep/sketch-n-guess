@@ -1,0 +1,37 @@
+
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="{% static 'game/style.css' %}">
+    </head>
+    
+    <body>
+    <script type = "text/javascript" src="{% static 'game/drawing.js' %}"></script>
+    {% if user.is_authenticated %}
+    <div id="game-timer"></div>
+    <canvas id="active-canvas" width="1000px" height="500px" style="border:1px solid #000000;text-align: center;">
+    </canvas>
+    <div id="tools-canvas-container">
+        <button id="decrease-pencil-canvas" class="tools-canvas" type="button">Decrease Size</button>
+        <button id="increase-pencil-canvas" class="tools-canvas" type="button" >Increase Size</button>
+        <button id="eraser-canvas" class="tools-canvas" type="button" >Eraser</button>
+        <button id="pencil-canvas" class="tools-canvas" type="button" >Pencil</button>
+        <!-- <button id="bucket-canvas" class="tools-canvas" type="button" onclick="fill=true;">Bucket</button> -->
+        <label for="favcolor">Change Color</label>
+        <input type="color" id="color-canvas" name="favcolor" value="#000000" >
+        <button id="clear-canvas" class="tools-canvas" type="button" >Clear Canvas</button>
+    </div>
+    {% else %}
+    <div class="login-required" id="login-to-draw">
+        <p>Oops! It seems that you are not logged in. If you would like to play, please <a class="ml-2"
+                href="/login">login</a></p>
+    </div>
+    {% endif %}
+
+</body>
+
+</html>ty
