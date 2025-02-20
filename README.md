@@ -10,7 +10,7 @@ To install virtualenv:
 ```
 pip install virtualenv
 ```
-Make a new directory where you will store your envionment:
+Make a new directory where you will store your environment:
 ```
 mkdir environments
 ```
