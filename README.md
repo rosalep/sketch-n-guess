@@ -22,6 +22,20 @@ To start the environment:
 ```
 source <env_name>/bin/activate
 ```
+NOTE: The secret key is stored using environment variables, so you need to this in the base directory:
+```
+pip install python-dotenv
+```
+The settings.py file should have the following lines added:
+```
+import os
+from dotenv import load_dotenv
+SECRET_KEY = os.environ.get('SECRET_KEY')
+```
+Inside the .env file insert the following:
+```
+SECRET_KEY=<your_key>
+```
 Once the environment is set up, run the following commands from the sketch_game/sketch_game directory:
 ```
 python3 manage.py makemigrations users
