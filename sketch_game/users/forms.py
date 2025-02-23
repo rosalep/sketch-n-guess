@@ -1,6 +1,6 @@
 from django import forms
-from .models import CustomUser
-from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser, Profile
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 class UserRegisterForm(UserCreationForm):
     # already has username and password fields
@@ -19,3 +19,17 @@ class UserRegisterForm(UserCreationForm):
             return user
         else:
             return None   
+
+class UpdateUserForm(UserChangeForm):
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'avatar']
+
+
+class UpdateProfileForm(forms.ModelForm):
+    bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
+
+    class Meta:
+        model = Profile
+        fields = ['bio']
