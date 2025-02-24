@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages 
-from .forms import UserRegisterForm,UpdateUserForm,UpdateProfileForm
-from django.contrib.auth.forms import AuthenticationForm 
+from .forms import UserRegisterForm,UpdateUserForm, UpdateProfileForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login, logout
 
 def home(request):
@@ -31,8 +31,6 @@ def signup(request):
         form = UserRegisterForm(request.POST) # custom form
         if form.is_valid():
             login(request, form.save()) # saves new user & auto logs in
-            username=form.cleaned_data.get('username')
-            messages.success(request, f'Account Created, Welcome {username}')
             return redirect("user-profile")
         
     else: 
@@ -47,15 +45,18 @@ def logout_view(request):
 
 def profileUpdate(request):
     if request.method == "POST":
-        user_form = UpdateUserForm(request.POST, request.FILES, instance=request.user)
-        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        user_form = UpdateUserForm(request.POST, request.FILES, instance=request.user) # username, email, avatar, password
+        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile) # bio
+               
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
             profile_form.save()
+            login(request, user_form.save()) # keep user logged in
             return redirect("user-profile")
-        
-    else:
+    else: # keep showing the forms
         user_form=UpdateUserForm(instance=request.user)
         profile_form=UpdateProfileForm(instance=request.user.profile)
-    return render(request, 'users/profileUpdate.html', {'user_form': user_form, 'profile_form': profile_form})
+
+    return render(request, 'users/profileUpdate.html', 
+                  {'user_form': user_form, 
+                   'profile_form': profile_form})
 
