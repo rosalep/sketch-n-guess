@@ -55,4 +55,5 @@ class Profile(models.Model):
 def make_profile(sender,instance,created,**kwargs):
     if created:
         Profile.objects.create(user=instance)
+        
 post_save.connect(make_profile,sender=CustomUser)

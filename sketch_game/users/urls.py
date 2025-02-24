@@ -1,7 +1,9 @@
-from django.urls import path
+from django.urls import path, reverse_lazy
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+
 # sub routes for profile
 urlpatterns = [
     path('', views.home, name='user-home'), # temp home 
