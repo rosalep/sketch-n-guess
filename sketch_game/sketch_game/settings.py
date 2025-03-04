@@ -40,11 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne', # needed for channels
     'django.contrib.staticfiles',
     'users',
     'game',
-    # 'users.apps.UsersConfig',
+    'channels',
 ]
+
+ASGI_APPLICATION = 'sketch_game.asgi.application' 
 
 # needed since base User model has been modified
 AUTH_USER_MODEL = 'users.CustomUser' 
@@ -152,3 +155,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL='/profile'
 LOGOUT_REDIRECT_URL='/'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND" : "channels.layers.InMemoryChannelLayer"
+    }
+}

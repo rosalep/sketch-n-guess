@@ -1,37 +1,75 @@
-
 {% load static%}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="{% static 'game/style.css' %}">
-    </head>
-    
-    <body>
-    <script type = "text/javascript" src="{% static 'game/drawing.js' %}"></script>
-    {% if user.is_authenticated %}
-    <div id="game-timer"></div>
-    <canvas id="active-canvas" width="1000px" height="500px" style="border:1px solid #000000;text-align: center;">
-    </canvas>
-    <div id="tools-canvas-container">
-        <button id="decrease-pencil-canvas" class="tools-canvas" type="button">Decrease Size</button>
-        <button id="increase-pencil-canvas" class="tools-canvas" type="button" >Increase Size</button>
-        <button id="eraser-canvas" class="tools-canvas" type="button" >Eraser</button>
-        <button id="pencil-canvas" class="tools-canvas" type="button" >Pencil</button>
-        <!-- <button id="bucket-canvas" class="tools-canvas" type="button" onclick="fill=true;">Bucket</button> -->
-        <label for="favcolor">Change Color</label>
-        <input type="color" id="color-canvas" name="favcolor" value="#000000" >
-        <button id="clear-canvas" class="tools-canvas" type="button" >Clear Canvas</button>
-    </div>
-    {% else %}
-    <div class="login-required" id="login-to-draw">
-        <p>Oops! It seems that you are not logged in. If you would like to play, please <a class="ml-2"
-                href="/login">login</a></p>
-    </div>
-    {% endif %}
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{% static 'game/style.css' %}">
+</head>
+
+<body>
+  <script type="text/javascript" src="{% static 'game/drawing.js' %}"></script>
+  {% if user.is_authenticated %}
+  <div id="game-timer"></div>
+  <canvas id="active-canvas" width="1000px" height="500px" style="border:1px solid #000000;text-align: center;">
+  </canvas>
+  <div id="tools-canvas-container">
+    <button id="decrease-pencil-canvas" class="tools-canvas" type="button">Decrease Size</button>
+    <button id="increase-pencil-canvas" class="tools-canvas" type="button">Increase Size</button>
+    <button id="eraser-canvas" class="tools-canvas" type="button">Eraser</button>
+    <button id="pencil-canvas" class="tools-canvas" type="button">Pencil</button>
+    <!-- <button id="bucket-canvas" class="tools-canvas" type="button" onclick="fill=true;">Bucket</button> -->
+    <label for="favcolor">Change Color</label>
+    <input type="color" id="color-canvas" name="favcolor" value="#000000">
+    <button id="clear-canvas" class="tools-canvas" type="button">Clear Canvas</button>
+  </div>
+
+  <div class="chat__item__container" id="id_chat_item_container" style="font-size: 20px">
+    <br />
+    <input type="text" id="id_guess_send_input" />
+    <button type="submit" id="id_guess_send_button">Send Message</button>
+    <div id="guess_history"></div>
+    <br />
+    <br />
+  </div>
+
+
+  {% else %}
+  <div class="login-required" id="login-to-draw">
+    <p>Oops! It seems that you are not logged in. If you would like to play, please <a class="ml-2"
+        href="/login">login</a></p>
+  </div>
+  {% endif %}
+  <script>
+        const chatSocket = new WebSocket("ws://" + window.location.host + "/");
+        chatSocket.onopen = function (e) {
+          console.log("The connection was setup successfully !");
+        };
+        chatSocket.onclose = function (e) {
+          console.log("Something unexpected happened !");
+        };
+        document.querySelector("#id_guess_send_input").focus();
+        document.querySelector("#id_guess_send_input").onkeyup = function (e) {
+          if (e.keyCode == 13) {
+            document.querySelector("#id_guess_send_button").click();
+          }
+        };
+        document.querySelector("#id_guess_send_button").onclick = function (e) {
+          var guessInput = document.querySelector(
+            "#id_guess_send_input"
+          ).value;
+          chatSocket.send(JSON.stringify({ guess: guessInput, username : "{{request.user.username}}"}));
+        };
+        chatSocket.onmessage = function (e) {
+          const data = JSON.parse(e.data);
+          var div = document.createElement("div");
+          div.innerHTML = data.username + " : " + data.guess;
+          document.querySelector("#id_guess_send_input").value = "";
+          document.querySelector("#id_chat_item_container").appendChild(div);
+        };
+      </script>
 </body>
 
 </html>

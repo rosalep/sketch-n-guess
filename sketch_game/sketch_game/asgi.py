@@ -11,6 +11,22 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sketch_game.settings')
+# added for real-time chat guesses
+from channels.routing import ProtocolTypeRouter, URLRouter
+from game import routing
+from channels.auth import AuthMiddlewareStack
 
-application = get_asgi_application()
+django_asgi_app = get_asgi_application()
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sketch_game.settings")
+
+application = ProtocolTypeRouter({
+    "http": django_asgi_app,
+    "websocket" : AuthMiddlewareStack(
+            URLRouter(
+                routing.websocket_urlpatterns
+            )    
+        )
+})
+
+ASGI_APPLICATION = 'sketch_game.asgi.application'
