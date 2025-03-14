@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', () => { // ensures HTML is loaded 
     let active = false;
     let eraser = false;
     // let fill = false;
+    var savedTime = sessionStorage.getItem("timeLeft");
+    if (savedTime) {
+        timeLeft = parseInt(savedTime);
+    }
     
     document.getElementById("increase-pencil-canvas").onclick = increaseWidth;
     document.getElementById("decrease-pencil-canvas").onclick = decreaseWidth;

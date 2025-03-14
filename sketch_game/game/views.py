@@ -5,4 +5,5 @@ from django.shortcuts import render
 # qd.get_name
 # Create your views here.
 def game(request):
+    
     return render(request,'game/active_game.html')

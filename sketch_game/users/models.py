@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from django.contrib.auth import logout
-from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 
@@ -40,7 +38,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username' 
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = ["email"] # username and password not included bc will always be req.
-
+    # REQUIRED_FIELDS = ["username","email","password"]]
     class Meta:
         verbose_name='CustomUser'
         verbose_name_plural='CustomUsers'
@@ -48,12 +46,24 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 class Profile(models.Model):
     user=models.OneToOneField(CustomUser,null=True,on_delete=models.CASCADE) # user deleted, profile deleted
     bio = models.TextField(default='Hello, world!')
-     
+
+    # added
+    wins = models.IntegerField(default=0)
+    total_score = models.IntegerField(default=0)
+
     def __str__(self):
         return str(self.user)
+    
+    # based on final team score
+    def add_to_score(self, points_to_add): # arbitrary amount
+        self.total_score += points_to_add
+    
+    def add_to_wins(self):
+        self.wins+=1
 
 def make_profile(sender,instance,created,**kwargs):
     if created:
         Profile.objects.create(user=instance)
-        
+
+# automatically make a profile when a user is created
 post_save.connect(make_profile,sender=CustomUser)
